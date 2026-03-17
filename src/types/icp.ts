@@ -1,12 +1,19 @@
 export type SelectionMode = 'single' | 'multi';
 export type QuestionCategory = 'demographics' | 'psychographics';
 
+export interface OptionDefinition {
+  label: string;
+  description?: string;
+}
+
+export type QuestionOption = string | OptionDefinition;
+
 export interface QuestionDefinition {
   id: string;
   category: QuestionCategory;
   label: string;
   subLabel?: string;
-  options: string[];
+  options: QuestionOption[];
   selectionMode: SelectionMode;
   maxSelections?: number;
 }

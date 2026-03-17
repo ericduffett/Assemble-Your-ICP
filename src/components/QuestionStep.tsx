@@ -1,4 +1,5 @@
-import type { QuestionDefinition } from '../types/icp';
+import { useState } from 'react';
+import type { QuestionDefinition, QuestionOption } from '../types/icp';
 
 interface QuestionStepProps {
   question: QuestionDefinition;
@@ -6,20 +7,33 @@ interface QuestionStepProps {
   onSelect: (values: string[]) => void;
 }
 
+function getLabel(option: QuestionOption): string {
+  return typeof option === 'string' ? option : option.label;
+}
+
+function getDescription(option: QuestionOption): string | undefined {
+  return typeof option === 'string' ? undefined : option.description;
+}
+
 export function QuestionStep({ question, selected, onSelect }: QuestionStepProps) {
   const { label, subLabel, options, selectionMode, maxSelections } = question;
   const isMulti = selectionMode === 'multi';
   const max = maxSelections ?? options.length;
+  const [showHints, setShowHints] = useState(false);
 
-  function handleToggle(option: string) {
+  const hasAnyDescriptions = options.some(
+    (opt) => typeof opt !== 'string' && opt.description
+  );
+
+  function handleToggle(optionLabel: string) {
     if (isMulti) {
-      if (selected.includes(option)) {
-        onSelect(selected.filter((s) => s !== option));
+      if (selected.includes(optionLabel)) {
+        onSelect(selected.filter((s) => s !== optionLabel));
       } else if (selected.length < max) {
-        onSelect([...selected, option]);
+        onSelect([...selected, optionLabel]);
       }
     } else {
-      onSelect([option]);
+      onSelect([optionLabel]);
     }
   }
 
@@ -33,7 +47,7 @@ export function QuestionStep({ question, selected, onSelect }: QuestionStepProps
           <p className="text-base text-gray-500 text-center mb-2">{subLabel}</p>
         )}
         {isMulti && (
-          <p className="text-sm text-gray-400 text-center mb-4">
+          <p className="text-sm text-gray-400 text-center mb-2">
             Select up to {max} &mdash;{' '}
             <span
               className={
@@ -45,21 +59,38 @@ export function QuestionStep({ question, selected, onSelect }: QuestionStepProps
           </p>
         )}
         {!isMulti && (
-          <p className="text-sm text-gray-400 text-center mb-4">
+          <p className="text-sm text-gray-400 text-center mb-2">
             Choose one
           </p>
         )}
+
+        {hasAnyDescriptions && (
+          <div className="text-center mb-4">
+            <button
+              onClick={() => setShowHints((v) => !v)}
+              className="text-sm text-gray-400 underline underline-offset-2
+                decoration-gray-300 active:text-indigo-500 transition-colors"
+            >
+              {showHints ? 'Hide hints' : 'Show hints'}
+            </button>
+          </div>
+        )}
+
+        {!hasAnyDescriptions && <div className="mb-2" />}
+
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {options.map((option) => {
-            const isSelected = selected.includes(option);
+            const optLabel = getLabel(option);
+            const description = getDescription(option);
+            const isSelected = selected.includes(optLabel);
             const isDisabled = isMulti && !isSelected && selected.length >= max;
             return (
               <button
-                key={option}
-                onClick={() => handleToggle(option)}
+                key={optLabel}
+                onClick={() => handleToggle(optLabel)}
                 disabled={isDisabled}
-                className={`min-h-[48px] px-4 py-3 rounded-xl text-sm font-medium text-center
-                  transition-all duration-150 border-2
+                className={`min-h-[48px] px-4 py-3 rounded-xl text-center
+                  transition-all duration-200 border-2
                   ${
                     isSelected
                       ? 'bg-indigo-600 text-white border-indigo-600 shadow-md'
@@ -68,7 +99,16 @@ export function QuestionStep({ question, selected, onSelect }: QuestionStepProps
                   ${isDisabled ? 'opacity-40 cursor-not-allowed' : 'active:scale-[0.97]'}
                 `}
               >
-                {option}
+                <span className="text-sm font-medium">{optLabel}</span>
+                {showHints && description && (
+                  <span
+                    className={`block text-xs mt-1 ${
+                      isSelected ? 'text-indigo-200' : 'text-gray-400'
+                    }`}
+                  >
+                    {description}
+                  </span>
+                )}
               </button>
             );
           })}
