@@ -51,7 +51,7 @@ export function ImageUpload({ currentImage, onImageSelected }: ImageUploadProps)
         Upload Your ICP Image
       </h2>
       <p className="text-base text-gray-500 mb-6 text-center max-w-sm">
-        Upload a picture of your ICP person with the background removed.
+        Upload a picture of your ICP. This picture will serve as the main visual element of your slide.
       </p>
 
       {currentImage ? (

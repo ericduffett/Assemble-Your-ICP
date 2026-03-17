@@ -13,7 +13,7 @@ export function StartScreen({ onStart }: StartScreenProps) {
         the demographics and psychographics that define your target customer.
       </p>
       <p className="text-base text-gray-400 max-w-sm mb-8">
-        You'll answer questions one at a time, then export a presentation-ready slide.
+        You'll answer questions one at a time, then export a presentation-ready slide and a text-based profile you can copy for use with AI.
       </p>
       <button
         onClick={onStart}
