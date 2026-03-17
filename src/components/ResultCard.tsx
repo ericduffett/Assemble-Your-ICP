@@ -83,17 +83,17 @@ export function ResultCard({ onStartOver }: ResultCardProps) {
   ].filter((d) => d.value);
 
   const leftSections = [
-    { title: 'Values', items: getAnswers(answers, 'values') },
-    { title: 'Identity', items: getAnswers(answers, 'identity') },
     { title: 'Hobbies & Interests', items: getAnswers(answers, 'hobbies') },
+    { title: 'Influencers & Media', items: getAnswers(answers, 'influencers') },
+    { title: 'Core Values', items: getAnswers(answers, 'core-values') },
+    { title: 'Fears', items: getAnswers(answers, 'opposite-fear') },
   ];
 
   const rightSections = [
-    { title: 'Influencers & Media', items: getAnswers(answers, 'influencers') },
-    { title: 'Fears & Barriers', items: getAnswers(answers, 'fears') },
     { title: 'JTBD — Functional', items: getAnswers(answers, 'jtbd-functional') },
     { title: 'JTBD — Emotional', items: getAnswers(answers, 'jtbd-emotional') },
     { title: 'JTBD — Social', items: getAnswers(answers, 'jtbd-social') },
+    { title: 'Buying Objections', items: getAnswers(answers, 'buying-objections') },
   ];
 
   async function handleExport() {
