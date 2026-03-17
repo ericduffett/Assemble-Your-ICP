@@ -1,6 +1,5 @@
 import { demographicQuestions } from '../data/demographics';
 import { psychographicQuestions } from '../data/psychographics';
-import type { QuestionOption } from '../types/icp';
 
 // Build a lookup from label -> description across all questions
 function buildDescriptionMap(): Record<string, string> {
