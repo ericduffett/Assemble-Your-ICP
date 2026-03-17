@@ -23,6 +23,7 @@ export interface ICPState {
   imageUrl: string | null;
   imageDataUrl: string | null; // base64 for export
   answers: Record<string, string[]>;
+  influencerDetails: Record<string, string>; // category -> specific examples
   icpName: string;
 }
 
@@ -30,5 +31,6 @@ export type ICPAction =
   | { type: 'SET_STEP'; step: number }
   | { type: 'SET_IMAGE'; url: string; dataUrl: string }
   | { type: 'SET_ANSWER'; questionId: string; values: string[] }
+  | { type: 'SET_INFLUENCER_DETAIL'; category: string; detail: string }
   | { type: 'SET_NAME'; name: string }
   | { type: 'RESET' };

@@ -4,7 +4,7 @@ import { psychographicQuestions } from '../data/psychographics';
 import type { QuestionDefinition } from '../types/icp';
 import { useICP } from '../state/ICPContext';
 
-export type StepType = 'start' | 'upload' | 'question' | 'name' | 'result';
+export type StepType = 'start' | 'upload' | 'question' | 'influencer-details' | 'name' | 'result';
 
 export interface StepInfo {
   type: StepType;
@@ -26,6 +26,9 @@ export function useICPFlow() {
     }
     for (const q of psychographicQuestions) {
       s.push({ type: 'question', question: q, sectionHeader: 'Psychographics' });
+      if (q.id === 'influencers') {
+        s.push({ type: 'influencer-details', sectionHeader: 'Psychographics' });
+      }
     }
 
     s.push({ type: 'name' });

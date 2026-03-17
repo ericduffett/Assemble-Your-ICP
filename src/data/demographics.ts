@@ -35,19 +35,19 @@ export const demographicQuestions: QuestionDefinition[] = [
      options: [
     {
       label: 'Local',
-      description: 'New Trier Area'
+      description: 'Lives in local community'
     },
     {
       label: 'Nearby',
-      description: 'Chicago + nearby suburbs.'
+      description: 'Lives within a one-hour drive.'
     },
     {
       label: 'In-State',
-      description: 'In Illinois but more than 1 hour drive away.'
+      description: 'In this state but more than 1 hour drive away.'
     },
     {
       label: 'Out of State',
-      description: 'Lives in the U.S. but not in Illinois.'
+      description: 'Lives in the U.S. but not in our home state.'
     },
     {
       label: 'International',

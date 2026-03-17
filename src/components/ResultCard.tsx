@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { useICP } from '../state/ICPContext';
 import { exportResultCard } from '../utils/exportImage';
+import { buildProfileText } from '../utils/buildProfileText';
 
 interface ResultCardProps {
   onStartOver: () => void;
@@ -70,8 +71,15 @@ export function ResultCard({ onStartOver }: ResultCardProps) {
   const { state } = useICP();
   const exportRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
+  const [copyToast, setCopyToast] = useState(false);
 
-  const { answers, imageDataUrl, imageUrl, icpName } = state;
+  const { answers, imageDataUrl, imageUrl, icpName, influencerDetails } = state;
+
+  // Build influencer items with specific details appended
+  const influencerItems = getAnswers(answers, 'influencers').map((category) => {
+    const detail = influencerDetails[category];
+    return detail ? `${category}: ${detail}` : category;
+  });
 
   const demographicItems = [
     { header: 'Age', value: getAnswers(answers, 'age-range')[0] },
@@ -84,7 +92,7 @@ export function ResultCard({ onStartOver }: ResultCardProps) {
 
   const leftSections = [
     { title: 'Hobbies & Interests', items: getAnswers(answers, 'hobbies') },
-    { title: 'Influencers & Media', items: getAnswers(answers, 'influencers') },
+    { title: 'Influencers & Media', items: influencerItems },
     { title: 'Core Values', items: getAnswers(answers, 'core-values') },
     { title: 'Fears', items: getAnswers(answers, 'opposite-fear') },
   ];
@@ -108,10 +116,67 @@ export function ResultCard({ onStartOver }: ResultCardProps) {
     }
   }
 
+  async function handleCopyProfile() {
+    const text = buildProfileText(icpName, answers, influencerDetails);
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopyToast(true);
+      setTimeout(() => setCopyToast(false), 2000);
+    } catch {
+      // Fallback: open a prompt-style window. On iPad Safari, if clipboard
+      // fails we show a temporary textarea for manual copy.
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.left = '0';
+      textarea.style.top = '0';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        setCopyToast(true);
+        setTimeout(() => setCopyToast(false), 2000);
+      } catch {
+        // Last resort: alert with the text
+        window.prompt('Copy this text:', text);
+      }
+      document.body.removeChild(textarea);
+    }
+  }
+
+  function handleStartOver() {
+    if (window.confirm('Start over? This will clear your current profile.')) {
+      onStartOver();
+    }
+  }
+
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col relative">
+      {/* Copy toast */}
+      {copyToast && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50
+          bg-gray-900 text-white text-sm font-medium px-5 py-2.5 rounded-full
+          shadow-lg animate-fade-in"
+        >
+          Copied to clipboard
+        </div>
+      )}
+
       {/* On-screen responsive view */}
       <div className="flex-1 overflow-y-auto px-4 py-6">
+        {/* Start Over - top right, subtle */}
+        <div className="flex justify-end max-w-3xl mx-auto mb-2">
+          <button
+            onClick={handleStartOver}
+            className="text-sm text-gray-400 underline underline-offset-2
+              decoration-gray-300 active:text-red-500 transition-colors"
+          >
+            Start Over
+          </button>
+        </div>
+
         <h1 className="text-3xl font-bold text-center text-gray-900 mb-6">
           {icpName || 'Your ICP'}
         </h1>
@@ -159,11 +224,12 @@ export function ResultCard({ onStartOver }: ResultCardProps) {
       {/* Action buttons */}
       <div className="flex justify-center gap-4 px-6 py-4">
         <button
-          onClick={onStartOver}
+          onClick={handleCopyProfile}
           className="min-h-[48px] px-6 py-3 rounded-xl text-base font-medium
-            bg-gray-100 text-gray-700 active:bg-gray-200 transition-colors"
+            bg-gray-100 text-gray-700 border-2 border-gray-200
+            active:bg-gray-200 transition-colors"
         >
-          Start Over
+          Copy Profile
         </button>
         <button
           onClick={handleExport}

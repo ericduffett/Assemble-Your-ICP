@@ -1,7 +1,7 @@
 import type { QuestionDefinition } from '../types/icp';
 
 export const psychographicQuestions: QuestionDefinition[] = [
-    {
+  {
     id: 'hobbies',
     category: 'psychographics',
     label: 'Hobbies & Interests',
@@ -141,29 +141,6 @@ export const psychographicQuestions: QuestionDefinition[] = [
     maxSelections: 3,
   },
   {
-    id: 'buying-objections',
-    category: 'psychographics',
-    label: 'Buying Objections',
-    subLabel: 'What concerns might stop them from buying in this category?',
-    options: [
-      'Too expensive',
-      'I don’t really need it',
-      'I’m not sure it’s good quality',
-      'I’m not sure it will work for me',
-      'I might not use it enough',
-      'I’m worried I’ll regret it',
-      'I don’t trust the brand/seller',
-      'It seems too complicated',
-      'It takes too much effort',
-      'It doesn’t fit my style or identity',
-      'I’m worried what others will think',
-      'I’d rather save my money',
-      'I can borrow/replace it with something else',
-    ],
-    selectionMode: 'multi',
-    maxSelections: 3,
-  },
-  {
     id: 'jtbd-functional',
     category: 'psychographics',
     label: 'Jobs-to-Be-Done',
@@ -230,5 +207,28 @@ export const psychographicQuestions: QuestionDefinition[] = [
     ],
     selectionMode: 'multi',
     maxSelections: 2,
+  },
+  {
+    id: 'buying-objections',
+    category: 'psychographics',
+    label: 'Buying Objections',
+    subLabel: 'What concerns might stop them from buying in this category?',
+    options: [
+      'Too expensive',
+      'I don’t really need it',
+      'I’m not sure it’s good quality',
+      'I’m not sure it will work for me',
+      'I might not use it enough',
+      'I’m worried I’ll regret it',
+      'I don’t trust the brand/seller',
+      'It seems too complicated',
+      'It takes too much effort',
+      'It doesn’t fit my style or identity',
+      'I’m worried what others will think',
+      'I’d rather save my money',
+      'I can borrow/replace it with something else',
+    ],
+    selectionMode: 'multi',
+    maxSelections: 3,
   },
 ];

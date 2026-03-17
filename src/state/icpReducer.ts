@@ -5,6 +5,7 @@ export const initialState: ICPState = {
   imageUrl: null,
   imageDataUrl: null,
   answers: {},
+  influencerDetails: {},
   icpName: '',
 };
 
@@ -18,6 +19,11 @@ export function icpReducer(state: ICPState, action: ICPAction): ICPState {
       return {
         ...state,
         answers: { ...state.answers, [action.questionId]: action.values },
+      };
+    case 'SET_INFLUENCER_DETAIL':
+      return {
+        ...state,
+        influencerDetails: { ...state.influencerDetails, [action.category]: action.detail },
       };
     case 'SET_NAME':
       return { ...state, icpName: action.name };

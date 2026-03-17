@@ -5,6 +5,7 @@ import { StepNavigation } from './components/StepNavigation';
 import { StartScreen } from './components/StartScreen';
 import { ImageUpload } from './components/ImageUpload';
 import { QuestionStep } from './components/QuestionStep';
+import { InfluencerDetailsStep } from './components/InfluencerDetailsStep';
 import { NameInput } from './components/NameInput';
 import { ResultCard } from './components/ResultCard';
 
@@ -30,6 +31,9 @@ function AppContent() {
   } else if (currentStepInfo?.type === 'question' && currentStepInfo.question) {
     const selected = state.answers[currentStepInfo.question.id] ?? [];
     canGoNext = selected.length > 0;
+  } else if (currentStepInfo?.type === 'influencer-details') {
+    // Always allow advancing — details are optional
+    canGoNext = true;
   } else if (currentStepInfo?.type === 'name') {
     canGoNext = state.icpName.trim().length > 0;
   }
@@ -66,6 +70,19 @@ function AppContent() {
             selected={state.answers[q.id] ?? []}
             onSelect={(values) =>
               dispatch({ type: 'SET_ANSWER', questionId: q.id, values })
+            }
+          />
+        );
+      }
+
+      case 'influencer-details': {
+        const selectedInfluencers = state.answers['influencers'] ?? [];
+        return (
+          <InfluencerDetailsStep
+            selectedCategories={selectedInfluencers}
+            details={state.influencerDetails}
+            onDetailChange={(category, detail) =>
+              dispatch({ type: 'SET_INFLUENCER_DETAIL', category, detail })
             }
           />
         );
