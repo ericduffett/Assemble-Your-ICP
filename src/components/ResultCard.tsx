@@ -73,14 +73,14 @@ export function ResultCard({ onStartOver }: ResultCardProps) {
 
   const { answers, imageDataUrl, imageUrl, icpName } = state;
 
-  const demographics = [
-    getAnswers(answers, 'age-range')[0],
-    getAnswers(answers, 'gender')[0],
-    getAnswers(answers, 'income')[0],
-    getAnswers(answers, 'geography')[0],
-    getAnswers(answers, 'household')[0],
-    getAnswers(answers, 'employment')[0],
-  ].filter(Boolean);
+  const demographicItems = [
+    { header: 'Age', value: getAnswers(answers, 'age-range')[0] },
+    { header: 'Gender', value: getAnswers(answers, 'gender')[0] },
+    { header: 'Income', value: getAnswers(answers, 'income')[0] },
+    { header: 'Geography', value: getAnswers(answers, 'geography')[0] },
+    { header: 'Household', value: getAnswers(answers, 'household')[0] },
+    { header: 'Employment', value: getAnswers(answers, 'employment')[0] },
+  ].filter((d) => d.value);
 
   const leftSections = [
     { title: 'Values', items: getAnswers(answers, 'values') },
@@ -144,10 +144,15 @@ export function ResultCard({ onStartOver }: ResultCardProps) {
         </div>
 
         {/* Demographics */}
-        <div className="text-center mt-6 max-w-3xl mx-auto">
-          <p className="text-sm text-gray-600">
-            {demographics.join('  •  ')}
-          </p>
+        <div className="mt-6 max-w-3xl mx-auto border-t border-gray-200 pt-4">
+          <div className="flex justify-center items-start divide-x divide-gray-300">
+            {demographicItems.map((d) => (
+              <div key={d.header} className="flex-1 text-center px-2">
+                <p className="text-xs font-semibold text-indigo-500 uppercase tracking-wider">{d.header}</p>
+                <p className="text-sm text-gray-700 mt-0.5">{d.value}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -260,20 +265,31 @@ export function ResultCard({ onStartOver }: ResultCardProps) {
           {/* Demographics footer */}
           <div
             style={{
-              textAlign: 'center',
               marginTop: 24,
               paddingTop: 16,
               borderTop: '2px solid #e5e7eb',
+              display: 'flex',
+              justifyContent: 'center',
             }}
           >
-            <div
-              style={{
-                fontSize: 24,
-                color: '#374151',
-              }}
-            >
-              {demographics.join('   •   ')}
-            </div>
+            {demographicItems.map((d, i) => (
+              <div
+                key={d.header}
+                style={{
+                  flex: 1,
+                  textAlign: 'center',
+                  borderLeft: i > 0 ? '1px solid #d1d5db' : 'none',
+                  padding: '0 12px',
+                }}
+              >
+                <div style={{ fontSize: 20, fontWeight: 700, color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  {d.header}
+                </div>
+                <div style={{ fontSize: 22, color: '#374151', marginTop: 4 }}>
+                  {d.value}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
