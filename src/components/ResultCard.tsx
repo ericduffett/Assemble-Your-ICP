@@ -79,6 +79,7 @@ export function ResultCard({ onStartOver }: ResultCardProps) {
     getAnswers(answers, 'income')[0],
     getAnswers(answers, 'geography')[0],
     getAnswers(answers, 'household')[0],
+    getAnswers(answers, 'employment')[0],
   ].filter(Boolean);
 
   const leftSections = [
